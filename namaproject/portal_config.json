@@ -1,0 +1,8 @@
+{
+    "plniconplus.co.id": {
+        "base_url": "https://plniconplus.co.id/e-proc/",
+        "article_selector": "article",
+        "title_selector": "h3",
+        "link_selector": "a"
+    }
+}

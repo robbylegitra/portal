@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Portal</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'namaaplikasi/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Portal</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="portal_key" value="{{ portal_key }}">
+            <input type="text" name="base_url" value="{{ portal.base_url }}" required>
+            <label for="article_tag">Tag Artikel:</label>
+            <input type="text" name="article_tag" value="{{ portal.article_selector }}" required>
+
+            <label for="title_tag">Tag Judul:</label>
+            <input type="text" name="title_tag" value="{{ portal.title_selector }}" required>
+
+            <label for="link_tag">Tag Link:</label>
+            <input type="text" name="link_tag" value="{{ portal.link_selector }}" required>
+
+            <button type="submit" name="edit_portal">Simpan Perubahan</button>
+        </form>
+
+        <br>
+        <a href="{% url 'home' %}" class="button">Kembali</a>
+    </div>
+</body>
+</html>

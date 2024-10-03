@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraping Portal</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'namaaplikasi/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Scraping Portal</h1>
+
+        <h2>Tambah Portal Baru</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="base_url" placeholder="URL Portal" required>
+            <button type="submit" name="add_portal">Deteksi Tag</button>
+        </form>
+
+        {% if detected_tags %}
+            <h2>Tag yang Terdeteksi</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="base_url" value="{{ base_url }}">
+                <label for="article_tag">Tag Artikel:</label>
+                <input type="text" name="article_tag" value="{{ detected_tags.article }}" required>
+
+                <label for="title_tag">Tag Judul:</label>
+                <input type="text" name="title_tag" value="{{ detected_tags.title }}" required>
+
+                <label for="link_tag">Tag Link:</label>
+                <input type="text" name="link_tag" value="{{ detected_tags.link }}" required>
+
+                <button type="submit" name="save_portal">Simpan Portal</button>
+            </form>
+        {% endif %}
+
+        <h2>Daftar Portal</h2>
+        <ul>
+            {% for key, portal in portals.items %}
+                <li>
+                    <strong>{{ key }}</strong> - {{ portal.base_url }}
+                    <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="portal" value="{{ key }}">
+                        <input type="number" name="total_pages" value="1" min="1" style="width: 50px;">
+                        <button type="submit">Scrape</button>
+                    </form>
+                    <form method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="portal_key" value="{{ key }}">
+                        <button type="submit" name="delete_portal" onclick="return confirm('Apakah Anda yakin ingin menghapus portal ini?');">Hapus</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% if data %}
+            <h2>Hasil Scraping</h2>
+            <ul>
+                {% for article in data %}
+                    <li><a href="{{ article.link }}">{{ article.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
